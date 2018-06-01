@@ -3,6 +3,8 @@ const sha256 = require('sha256');
 function Blockchain(){
   this.chain = [];
   this.pendingTransactions = [];
+  // init first blockchain
+  this.createNewBlock(280696, 'crazytrau', 'htphuocdl');
 }
 
 Blockchain.prototype.createNewBlock = function(nonce,previousBlockHash, hash){
