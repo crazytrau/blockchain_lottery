@@ -46,9 +46,11 @@ Blockchain.prototype.hashBlock = function(previousBlockHash,currentBlockData, no
 }
 
 Blockchain.prototype.proofOfWork = function(previousBlockHash,currentBlockData){
+  console.log('asdas', previousBlockHash, currentBlockData);
   let nonce = 0;
   let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
-  while (hash.substring(0,4) != '00000'){
+  while (hash.substring(0,4) != '0000'){
+    console.log(nonce);
     hash = this.hashBlock(previousBlockHash, currentBlockData, ++nonce);
   }
   return nonce;

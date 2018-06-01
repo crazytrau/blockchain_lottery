@@ -5,6 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+global.uuid = require('uuid/v1');
+
+const Blockchain = require('./blockchain');
+global.lottery = new Blockchain();
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
