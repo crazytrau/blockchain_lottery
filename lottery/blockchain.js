@@ -1,8 +1,12 @@
 const sha256 = require('sha256');
+const currentNodeUrl=process.argv[3];
 
 function Blockchain(){
   this.chain = [];
   this.pendingTransactions = [];
+
+  this.currentNodeUrl = currentNodeUrl;
+  this.netWorkNodes = [];
   // init first blockchain
   this.createNewBlock(280696, 'crazytrau', 'htphuocdl');
 }

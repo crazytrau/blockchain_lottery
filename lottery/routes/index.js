@@ -38,4 +38,21 @@ router.get('/mine', function(req,res){
   })
 });
 
+//register and broadcast it the network
+router.post('/register-and-broadcast-node',function(req,res){
+  const newNodeUrl = req.body.newNodeUrl;
+
+});
+
+
+//register node to the network
+router.post('register-node',function (req,res){
+
+});
+
+//register multible nodes at once
+router.post('register-node-bulk',function (req,res){
+
+});
+
 module.exports = router;
