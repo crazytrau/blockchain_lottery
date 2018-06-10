@@ -17,6 +17,8 @@
     "ejs": "~0.8.5",
     "express": "~4.0.0",
     "morgan": "~1.0.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
     "sha256": "^0.2.0",
     "static-favicon": "~1.0.0",
     "uuid": "^3.2.1"

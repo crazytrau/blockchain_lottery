@@ -39,9 +39,26 @@ router.get('/mine', function(req,res){
 });
 
 //register and broadcast it the network
-router.post('/register-and-broadcast-node',function(req,res){
+router.post('/register-and-br oadcast-node',function(req,res){
   const newNodeUrl = req.body.newNodeUrl;
+  if (lottery.netWorkNodes.indexOf(newNodeUrl) == -1) lottery.networkNodes.push(newNodeUrl);
 
+  const regNodesPromises = [];
+  lottery.netWorkNodes.forEach(networNodeUrl => {
+    const requestOptions = {
+      uri: networNodeUrl + '/register-node',
+      method: 'POST',
+      body:{newNodeUrl : newNodeUrl},
+      json:true
+    };
+
+    regNodesPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(regNodesPromises)
+  .then(data => {
+
+  });
 });
 
 
