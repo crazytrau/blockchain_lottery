@@ -44,9 +44,9 @@ router.post('/register-and-broadcast-node',function(req,res){
   if (lottery.netWorkNodes.indexOf(newNodeUrl) == -1) lottery.networkNodes.push(newNodeUrl);
 
   const regNodesPromises = [];
-  lottery.netWorkNodes.forEach(networNodeUrl => {
+  lottery.netWorkNodes.forEach(networkNodeUrl => {
     const requestOptions = {
-      uri: networNodeUrl + '/register-node',
+      uri: networkNodeUrl + '/register-node',
       method: 'POST',
       body:{newNodeUrl : newNodeUrl},
       json:true
@@ -81,8 +81,15 @@ router.post('/register-node',function (req,res){
 });
 
 //register multible nodes at once
-router.post('/register-node-bulk',function (req,res){
+router.post('/register-nodes-bulk',function (req,res){
+  const allNetworkNodes = req.body.allNetworkNodes;
+  allNetworkNodes.forEach(networkNodeUrl=>{
+    const notExistNode = lottery.netWorkNodes.indexOf(networkNodeUrl) == -1;
+    const notCurrentNodeUrl = lottery.currentNodeUrl !== networkNodeUrl;
+    if (notExistNode && notCurrentNodeUrl) lottery.netWorkNodes.push(networkNodeUrl);
+  });
 
+  res.json({note:'Bulk registration successfully.'});
 });
 
 module.exports = router;
