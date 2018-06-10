@@ -39,7 +39,7 @@ router.get('/mine', function(req,res){
 });
 
 //register and broadcast it the network
-router.post('/register-and-br oadcast-node',function(req,res){
+router.post('/register-and-broadcast-node',function(req,res){
   const newNodeUrl = req.body.newNodeUrl;
   if (lottery.netWorkNodes.indexOf(newNodeUrl) == -1) lottery.networkNodes.push(newNodeUrl);
 
@@ -57,18 +57,31 @@ router.post('/register-and-br oadcast-node',function(req,res){
 
   Promise.all(regNodesPromises)
   .then(data => {
+    const bulkRegisterOptions ={
+      uri:newNodeUrl + '/register-nodes-bulk',
+      body:'POST',
+      body:{allNetworkNodes:[...lottery.networkNodes, lottery.currentNodeUrl]},
+      json:true
+    };
 
-  });
+    return rp(bulkRegisterOptions);
+  })
+  .then(data=>{
+    res.json({note:'New node registered with network successfully'})
+  })
 });
 
-
 //register node to the network
-router.post('register-node',function (req,res){
-
+router.post('/register-node',function (req,res){
+  const newNodeUrl = req.body.newNodeUrl;
+  const nodeNotAlreadyPresent = lottery.netWorkNodes.indexOf(newNodeUrl) == -1;
+  const notCurrentNode = lottery.currentNodeUrl !== newNodeUrl;
+  if (nodeNotAlreadyPresent && notCurrentNode) lottery.netWorkNodes.push(newNodeUrl);
+  res.json({ note: 'New node register successfully.'});
 });
 
 //register multible nodes at once
-router.post('register-node-bulk',function (req,res){
+router.post('/register-node-bulk',function (req,res){
 
 });
 
