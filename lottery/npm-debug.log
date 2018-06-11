@@ -7,7 +7,7 @@
 6 silly lifecycle application-name@0.0.1~prenode_1: no script for prenode_1, continuing
 7 info lifecycle application-name@0.0.1~node_1: application-name@0.0.1
 8 verbose lifecycle application-name@0.0.1~node_1: unsafe-perm in lifecycle true
-9 verbose lifecycle application-name@0.0.1~node_1: PATH: /usr/share/npm/bin/node-gyp-bin:/home/crazytrau/Desktop/blockchain_lottery/lottery/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+9 verbose lifecycle application-name@0.0.1~node_1: PATH: /usr/share/npm/bin/node-gyp-bin:/home/crazytrau/Desktop/blockchain_lottery/lottery/node_modules/.bin:/home/crazytrau/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 10 verbose lifecycle application-name@0.0.1~node_1: CWD: /home/crazytrau/Desktop/blockchain_lottery/lottery
 11 silly lifecycle application-name@0.0.1~node_1: Args: [ '-c', 'nodejs ./bin/www 3001 http://localhost:3001' ]
 12 silly lifecycle application-name@0.0.1~node_1: Returned: code: 1  signal: null

@@ -13,9 +13,29 @@ router.get('/blockchain', function(req,res){
 });
 
 router.post('/transaction', function(req,res){
-  const blockIndex = lottery.createNewTransaction(req.body.amount,req.body.sender, req.body.recipient);
-  res.json({
-    note: `It add in block ${blockIndex}`
+  const newTransaction = req.body;
+  const blockIndex = lottery.addTransactionToPendingTransactions(newTransaction);
+  res.json({note:`transaction will be added in block${blockIndex}.`});
+});
+
+router.post('/transaction/broadcast', function(req,res){
+  const newTransaction = lottery.createNewTransaction(req.body.amount,req.body.sender, req.body.recipient);
+  lottery.addTransactionToPendingTransactions(newTransaction);
+  const requestPromises =[];
+  lottery.netWorkNodes.forEach(networkNodeUrl=>{
+    const requestOptions={
+      uri:networkNodeUrl+'/transaction',
+      method:'POST',
+      body:newTransaction,
+      json:true
+    };
+
+    requestPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(requestPromises)
+  .then(data=>{
+    res.json({note:'transaction created and broadcast successfully.'});
   });
 });
 
