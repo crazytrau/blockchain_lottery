@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const nodeAddress = uuid().split('-').join('');
-
+const rp = require('request-promise')
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
@@ -41,7 +41,7 @@ router.get('/mine', function(req,res){
 //register and broadcast it the network
 router.post('/register-and-broadcast-node',function(req,res){
   const newNodeUrl = req.body.newNodeUrl;
-  if (lottery.netWorkNodes.indexOf(newNodeUrl) == -1) lottery.networkNodes.push(newNodeUrl);
+  if (lottery.netWorkNodes.indexOf(newNodeUrl) == -1) lottery.netWorkNodes.push(newNodeUrl);
 
   const regNodesPromises = [];
   lottery.netWorkNodes.forEach(networkNodeUrl => {
@@ -54,21 +54,23 @@ router.post('/register-and-broadcast-node',function(req,res){
 
     regNodesPromises.push(rp(requestOptions));
   });
-
   Promise.all(regNodesPromises)
-  .then(data => {
-    const bulkRegisterOptions ={
-      uri:newNodeUrl + '/register-nodes-bulk',
-      body:'POST',
-      body:{allNetworkNodes:[...lottery.networkNodes, lottery.currentNodeUrl]},
-      json:true
-    };
-
-    return rp(bulkRegisterOptions);
-  })
-  .then(data=>{
-    res.json({note:'New node registered with network successfully'})
-  })
+    .then(data => {
+      const bulkRegisterOptions = {
+        uri: newNodeUrl + '/register-nodes-bulk',
+        method: 'POST',
+        body: {
+          allNetworkNodes: [...lottery.netWorkNodes, lottery.currentNodeUrl]
+        },
+        json: true
+      };
+      return rp(bulkRegisterOptions);
+    })
+    .then(data => {
+      res.json({
+        note: 'New Note Registered with network successfully'
+      });
+    });
 });
 
 //register node to the network

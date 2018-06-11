@@ -10,7 +10,7 @@ global.uuid = require('uuid/v1');
 const Blockchain = require('./blockchain');
 global.lottery = new Blockchain();
 
-const rp=require('request-promise');
+// const rp=require('request-promise');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
