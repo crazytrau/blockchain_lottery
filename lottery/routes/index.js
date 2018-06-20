@@ -49,13 +49,63 @@ router.get('/mine', function(req,res){
   const nonce = lottery.proofOfWork(previousBlockHash, currentBlockData);
   const blockHash = lottery.hashBlock(previousBlockHash, currentBlockData, nonce);
 
-  lottery.createNewTransaction(12.5, "00", nodeAddress);
-
   const newBlock = lottery.createNewBlock(nonce, previousBlockHash,blockHash);
-  res.json({
-    note: "new block mine successfully",
-    block: newBlock
+
+  const requestPromises = [];
+  lottery.netWorkNodes.forEach(networkNodeUrl=>{
+    const requestOptions ={
+      uri:networkNodeUrl+'/receive-new-block',
+      method:'POST',
+      body:{newBlock:newBlock},
+      json:true
+    };
+
+    requestPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(requestPromises)
+  .then(data=>{
+    //lottery.createNewTransaction(12.5, "00", nodeAddress);
+    const requestOptions = {
+      uri:lottery.currentNodeUrl+'/transaction/broadcast',
+      method:'POST',
+      body:{
+        amount:12.5,
+        sender:'00',
+        recipient:nodeAddress
+      },
+      json:true
+    };
+
+    return rp(requestOptions);
   })
+  .then(data=>{
+    res.json({
+      note: "new block mine and broadcast successfully",
+      block: newBlock
+    });
+  });
+});
+
+router.post('/receive-new-block',function(req,res){
+  const newBlock = req.body.newBlock;
+  const lastBlock = lottery.getLastBlock();
+  const correctHash = lastBlock.hash === newBlock.previousBlockHash;
+  const correctIndex = lastBlock['index']+1 === newBlock['index'];
+  if (correctHash && correctIndex){
+    lottery.chain.push(newBlock);
+    lottery.pendingTransactions = [];
+    res.json({
+      note:'new block received and accepted.',
+      newBlock:newBlock
+    });
+  }else{
+    res.json({
+      note: 'new block rejected,',
+      newBlock:newBlock
+    });
+  }
+
 });
 
 //register and broadcast it the network
